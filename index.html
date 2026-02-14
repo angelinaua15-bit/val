@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Valentine</title>
+<style>
+  :root{
+    --bg1:#07080c;
+    --bg2:#0b0d12;
+    --env:#ffc0d4;
+    --lid:#ff9ec0;
+    --paper:#fff;
+    --btn:#ff5f93;
+    --text:#111;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    background: linear-gradient(180deg,var(--bg1),var(--bg2));
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    color:#fff;
+  }
+
+  .container{
+    text-align:center;
+    display:grid;
+    gap:16px;
+    justify-items:center;
+  }
+
+  /* ENVELOPE */
+  .envelope{
+    position:relative;
+    width:320px;
+    height:200px;
+    overflow:hidden;              /* нічого не видно коли закрито */
+    border-radius:16px;
+    filter: drop-shadow(0 18px 35px rgba(0,0,0,.55));
+  }
+
+  .back{
+    position:absolute;
+    inset:0;
+    background: var(--env);
+    z-index:1;
+  }
+
+  /* LETTER */
+  .letter{
+    position:absolute;
+    left:20px;
+    width:280px;
+    height:160px;
+    bottom:-170px;                /* повністю схований */
+    background: var(--paper);
+    border-radius:12px;
+    z-index:2;
+    transition: bottom .75s cubic-bezier(.2,.9,.2,1);
+    padding:18px 16px;
+    color: var(--text);
+
+    /* ✅ ідеальне центрування */
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    text-align:center;
+  }
+
+  .envelope.open .letter{
+    bottom:28px;                  /* виїжджає */
+  }
+
+  /* LID */
+  .lid{
+    position:absolute;
+    left:0; right:0;
+    top:0;
+    width:0; height:0;
+    margin:auto;
+    border-left:160px solid transparent;
+    border-right:160px solid transparent;
+    border-top:120px solid var(--lid);
+    transform-origin: top center;
+    transform: rotateX(0deg);
+    transition: transform .75s cubic-bezier(.2,.9,.2,1);
+    z-index:3;
+  }
+
+  .envelope.open .lid{
+    transform: rotateX(180deg);
+  }
+
+  /* TEXT */
+  h3{
+    margin:0;
+    font-size:20px;
+    line-height:1.2;
+  }
+
+  p{
+    margin:0;
+    font-size:15px;
+    line-height:1.45; /* ✅ щоб не "з'їжджало" */
+    max-width: 25ch;
+  }
+
+  .sig{
+    margin-top:2px;
+    font-size:12px;
+    opacity:.65;
+    font-weight:700;
+    letter-spacing:.2px;
+  }
+
+  /* ✅ РІВНЕ СЕРЦЕ */
+  .heart{
+    width:24px;
+    height:24px;
+    position:relative;
+    transform: rotate(45deg);
+    background: #ff2b4f;
+    border-radius:6px;
+    animation: beat 1.05s ease-in-out infinite;
+  }
+
+  .heart::before,
+  .heart::after{
+    content:"";
+    position:absolute;
+    width:24px;
+    height:24px;
+    background:#ff2b4f;
+    border-radius:50%;
+  }
+
+  .heart::before{
+    left:-12px;
+    top:0;
+  }
+
+  .heart::after{
+    left:0;
+    top:-12px;
+  }
+
+  @keyframes beat{
+    0%,100% { transform: rotate(45deg) scale(1); }
+    50%     { transform: rotate(45deg) scale(1.18); }
+  }
+
+  /* BUTTON */
+  button{
+    padding:11px 22px;
+    border:none;
+    border-radius:12px;
+    background: var(--btn);
+    color:#fff;
+    font-weight:800;
+    cursor:pointer;
+    transition: transform .15s ease, opacity .15s ease;
+  }
+  button:hover{ transform: translateY(-1px); }
+  button:active{ transform: translateY(0) scale(.99); }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="envelope" id="env">
+    <div class="back"></div>
+
+    <div class="letter">
+      <h3>Happy Valentine’s Day</h3>
+      <div class="heart" aria-hidden="true"></div>
+      <p>Бажаю тобі тепла, натхнення і щасливих моментів 🙂Люблю💜</p>
+      <div class="sig">Дані від Ангеліни</div>
+    </div>
+
+    <div class="lid" aria-hidden="true"></div>
+  </div>
+
+  <button id="toggleBtn">Open</button>
+</div>
+
+<script>
+  const env = document.getElementById("env");
+  const btn = document.getElementById("toggleBtn");
+  let open = false;
+
+  btn.addEventListener("click", () => {
+    open = !open;
+    env.classList.toggle("open", open);
+    btn.textContent = open ? "Close" : "Open";
+  });
+</script>
+
+</body>
+</html>
